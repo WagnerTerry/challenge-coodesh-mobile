@@ -7,7 +7,10 @@ export const Home = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.title}>Hello World</Text>
+        <Text style={styles.title}>Word list</Text>
+        {/* <View>
+          <Text></Text>
+        </View> */}
       </View>
     </SafeAreaView>
   )
