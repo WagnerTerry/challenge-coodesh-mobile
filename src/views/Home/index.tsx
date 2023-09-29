@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { SafeAreaView, Text, TextInput, View } from 'react-native'
+import { SafeAreaView, Text, TextInput, ToastAndroid, View } from 'react-native'
 import {fetchWord} from '../../services/DictionaryService'
 import { styles } from './styles'
 
@@ -9,6 +9,17 @@ export const Home = () => {
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
 
+  const handleShowToast = (message: string) => {
+    // Exibe uma mensagem de sucesso temporária
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.LONG, // Duração da mensagem (LONG ou SHORT)
+      ToastAndroid.BOTTOM, // Posição (TOP, BOTTOM, CENTER)
+      25, // Deslocamento vertical em pixels
+      50 // Deslocamento horizontal em pixels
+    );
+  }
+
   async function searchWord(text: string){
     try {
       setLoading(true)
@@ -16,13 +27,13 @@ export const Home = () => {
      console.log("aee", word)
      // setWord(word)
      setLoading(false);
-    //  handleShowToast("Tarefa do servidor adicionada")
+     handleShowToast("Busca concluída")
+
 
     } catch(error){
       console.log("error fetching word data", error)
       setLoading(false);
-      // handleShowToast("Erro ao buscar tarefas, verifique sua internet, ou tente novamente mais tarde")
-
+      handleShowToast("Ocorreu um erro ao buscar palavra, verifique a internet")
     }
   }
 
