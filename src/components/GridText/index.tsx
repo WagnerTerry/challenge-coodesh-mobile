@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface Item {
   id: string;
@@ -42,6 +42,14 @@ export const GridText = () => {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
+  function showWord(){
+    console.log("show word")
+  }
+
+  function addFavorites(){
+    console.log("Add favorites")
+  }
+
 
   return (
     <FlatList
@@ -49,7 +57,14 @@ export const GridText = () => {
       numColumns={3}
       renderItem={({ item }) => (
         <View style={styles.item}>
+          <TouchableOpacity
+          activeOpacity={0.3}
+          onPress={() => showWord()}
+          onLongPress={() => addFavorites()}
+          >
           <Text style={styles.truncatedText}>{truncateText(item.text, 20)}</Text>
+
+          </TouchableOpacity>
         </View>
       )}
       keyExtractor={(item) => item.id}
@@ -73,6 +88,7 @@ const styles = StyleSheet.create({
     marginLeft: -5,
   },
   truncatedText: {
+    fontSize: 18,
     maxWidth: '100%', // Define um tamanho máximo para o texto
     overflow: 'hidden', // Esconde o texto que ultrapassar o tamanho máximo
   },
