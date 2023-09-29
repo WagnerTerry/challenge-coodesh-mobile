@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     padding: Platform.OS === 'ios' ? 16 : 12,
     marginTop: 30,
+    marginBottom: 40,
     paddingHorizontal: 8,
     borderRadius: 8,
     borderColor: 'black',
@@ -26,7 +27,6 @@ export const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 20,
-    marginTop: 16,
     textAlign: 'center',
   },
 });

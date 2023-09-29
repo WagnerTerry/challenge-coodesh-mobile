@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View } from 'react-native'
+import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } from 'react-native'
 import {fetchWord} from '../../services/DictionaryService'
 import { styles } from './styles'
+import { GridText } from '../../components/GridText'
 
 export const Home = () => {
 
@@ -58,12 +59,15 @@ export const Home = () => {
           editable={!loading}
         />
           {loading ? (
-          <Text style={styles.loadingText}>Carregando Tarefa...</Text>
+          <Text style={styles.loadingText}>Buscando Palavra...</Text>
         ) : (
           <>
-            {errorAPI && (
+            {errorAPI ? (
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
-            )}
+            ) : <View>
+              <GridText />
+                {/* <Text>aaaa</Text> */}
+            </View>}
           </>
         )}
       </View>
