@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } from 'react-native'
-import {fetchWord} from '../../services/DictionaryService'
+import { fetchWord } from '../../services/DictionaryService'
 import { styles } from './styles'
 import { GridText } from '../../components/GridText'
-import { useWordList } from '../../context/WordsContext'
+import { IWord, useWordList } from '../../context/WordsContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 export const Home = () => {
@@ -12,7 +12,7 @@ export const Home = () => {
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
 
-  const {addWord, removeAllWords}= useWordList()
+  const { words, addWord, removeAllWords } = useWordList()
 
   const handleShowToast = (message: string) => {
     // Exibe uma mensagem de sucesso temporária
@@ -25,7 +25,7 @@ export const Home = () => {
     );
   }
 
-  async function searchWord(text: string){
+  async function searchWord(text: string) {
     try {
       if (text.trim() === '') {
         Alert.alert("Campo vazio", "Por favor, busque por uma palavra")
@@ -33,11 +33,12 @@ export const Home = () => {
       }
       setLoading(true)
       const newWord = await fetchWord(text)
-      // const data = {
-      //   id: String(new Date().getTime()),
-      //   word: newTask,
-      //   completed: false
-      // }
+      const checkRepeatedWord = words.filter((wordRepeated) => wordRepeated.word.toUpperCase() === text.toUpperCase())
+      if(checkRepeatedWord.length > 0){
+        Alert.alert('Palavra repetida', "Essa palavra já foi registrada")
+        setLoading(false);
+        return;
+      }
       const data = {
         id: String(new Date().getTime()),
         word: newWord[0].word,
@@ -45,14 +46,13 @@ export const Home = () => {
         meanings: newWord[0].meanings
 
       }
-      //console.log("aee", data)
-    addWord(data)
-     // setWord(word)
-     setLoading(false);
-     handleShowToast("Busca concluída")
+      addWord(data)
+      setWord('')
+      setLoading(false);
+      handleShowToast("Busca concluída")
 
 
-    } catch(error){
+    } catch (error) {
       console.log("error fetching word data", error)
       setLoading(false);
       handleShowToast("Ocorreu um erro ao buscar palavra, tente novamente mais tarde, ou verifique a internet")
@@ -75,16 +75,16 @@ export const Home = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-        <Text style={styles.title}>Word list</Text>
-        <Icon
+          <Text style={styles.title}>Word list</Text>
+          <Icon
             name='delete'
             size={30}
             color="#eb1c1c"
             onPress={clearWordList}
           />
-          </View>
+        </View>
         <TextInput
-        style={styles.input}
+          style={styles.input}
           placeholder='Search word'
           placeholderTextColor={'#b4bec7'}
           onChangeText={setWord}
@@ -92,7 +92,7 @@ export const Home = () => {
           onBlur={() => searchWord(word)}
           editable={!loading}
         />
-          {loading ? (
+        {loading ? (
           <Text style={styles.loadingText}>Buscando Palavra...</Text>
         ) : (
           <>
@@ -100,7 +100,7 @@ export const Home = () => {
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
             ) : <View>
               <GridText />
-                {/* <Text>aaaa</Text> */}
+              {/* <Text>aaaa</Text> */}
             </View>}
           </>
         )}

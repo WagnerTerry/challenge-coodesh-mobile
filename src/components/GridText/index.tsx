@@ -30,8 +30,6 @@ export const GridText = () => {
   useEffect(() => {
     async function loadWords() {
       const wordList = await AsyncStorage.getItem(storeWord)
-      console.log("load wo", wordList)
-
       if (wordList) {
         setTeste(JSON.parse(wordList))
       }
