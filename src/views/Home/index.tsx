@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { SafeAreaView, Text, TextInput, ToastAndroid, View } from 'react-native'
+import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View } from 'react-native'
 import {fetchWord} from '../../services/DictionaryService'
 import { styles } from './styles'
 
@@ -22,6 +22,10 @@ export const Home = () => {
 
   async function searchWord(text: string){
     try {
+      if (text.trim() === '') {
+        Alert.alert("Campo vazio", "Por favor, busque por uma palavra")
+        return;
+      }
       setLoading(true)
       const word = await fetchWord(text)
      console.log("aee", word)
@@ -33,7 +37,7 @@ export const Home = () => {
     } catch(error){
       console.log("error fetching word data", error)
       setLoading(false);
-      handleShowToast("Ocorreu um erro ao buscar palavra, verifique a internet")
+      handleShowToast("Ocorreu um erro ao buscar palavra, tente novamente mais tarde, ou verifique a internet")
     }
   }
 
