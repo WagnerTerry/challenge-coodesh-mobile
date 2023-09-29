@@ -26,7 +26,7 @@ export function AppRoutes() {
           options={{
             tabBarLabel: 'Word list',
             tabBarIcon: ({ focused, color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
+              <MaterialCommunityIcons name="notebook" color={color} size={size} />
             ),
           }}
         />

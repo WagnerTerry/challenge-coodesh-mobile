@@ -37,6 +37,7 @@ export const Home = () => {
       if(checkRepeatedWord.length > 0){
         Alert.alert('Palavra repetida', "Essa palavra já foi registrada")
         setLoading(false);
+        setWord('')
         return;
       }
       const data = {
