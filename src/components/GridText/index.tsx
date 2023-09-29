@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { IWord, useWordList } from '../../context/WordsContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Modal from 'react-native-modal';
@@ -118,20 +118,20 @@ export const GridText = () => {
             size={40}
             onPress={toggleModal}
           />
+          <ScrollView style={styles.scrollView}>
+
           <View style={styles.modalContainer}>
           <Text style={styles.modalText}>{modalTitle.word}</Text>
           <Text style={styles.modalText}>{modalTitle && modalTitle.phonetics && modalTitle.phonetics[0].text && modalTitle.phonetics[0].text}</Text>
           </View>
           <View>
             <Text style={styles.meaningsTitle}>Meanings</Text>
-            {/* <Text style={styles.meaningsText}>aaa</Text> */}
             {modalTitle && modalTitle.meanings &&  modalTitle.meanings[0].definitions.map((meaning: any) => (
               <Text>{meaning.definition}</Text>
             ))}
           </View>
-          {/* <TouchableOpacity onPress={toggleModal}>
-            <Text>Fechar Modal</Text>
-          </TouchableOpacity> */}
+          </ScrollView>
+
         </View>
       </Modal>
 
@@ -156,22 +156,26 @@ const styles = StyleSheet.create({
     maxWidth: '100%', // Define um tamanho máximo para o texto
     overflow: 'hidden', // Esconde o texto que ultrapassar o tamanho máximo
   },
+  scrollView: {
+    flex: 1
+  },
   modalContent: {
     backgroundColor: 'white',
     padding: 16,
     borderRadius: 8,
     height: '70%',
   },
-  modalText: {
-    fontSize: 26,
-    textAlign: 'center',
-    marginBottom: 16
-  },
   modalContainer: {
     marginTop: 16,
     backgroundColor: '#efa8b4',
     padding: 16
   },
+  modalText: {
+    fontSize: 26,
+    textAlign: 'center',
+    marginBottom: 16
+  },
+
   meaningsTitle: {
     marginTop: 24,
     marginBottom: 16,
