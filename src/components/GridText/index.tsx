@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { IWord, useWordList } from '../../context/WordsContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 interface Item {
   id: string;
@@ -21,6 +23,8 @@ export const GridText = () => {
   const {words, removeWord} = useWordList()
   const [data, setData] = useState<Item[]>([]);
   const [teste, setTeste] = useState<IWord[]>([]);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState([] as any);
 
   const [pageNumber, setPageNumber] = useState<number>(1);
   const itemsPerPage: number = 9;
@@ -61,6 +65,16 @@ export const GridText = () => {
     console.log("Add favorites")
   }
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const openModalWithParam = (word: any) => {
+    console.log("ansy", word)
+    setModalTitle(word); // Define o título do modal com o parâmetro
+    toggleModal(); // Abre o modal
+  };
+
   const handleRemoveTask = (id: string, word: string) => {
     Alert.alert(word, 'Deseja realmente excluir essa palavra', [
       {
@@ -74,8 +88,8 @@ export const GridText = () => {
     ])
   }
 
-
   return (
+    <>
     <FlatList
       data={teste as unknown as IWord[]}
       numColumns={3}
@@ -83,7 +97,7 @@ export const GridText = () => {
         <View style={styles.item}>
           <TouchableOpacity
           activeOpacity={0.3}
-          onPress={() => showWord()}
+          onPress={() => openModalWithParam(item)}
           onLongPress={() => handleRemoveTask(item.id, item.word)}
           >
           <Text style={styles.truncatedText}>{item.word}</Text>
@@ -96,6 +110,24 @@ export const GridText = () => {
       onEndReachedThreshold={0.1}
       columnWrapperStyle={styles.columnWrapper}
     />
+     <Modal isVisible={isModalVisible}>
+
+        <View style={styles.modalContent}>
+        <Icon
+            name='close'
+            size={40}
+            onPress={toggleModal}
+          />
+          <View style={styles.modalContainer}>
+          <Text style={styles.modalText}>{modalTitle.word}</Text>
+          <Text style={styles.modalText}>{modalTitle && modalTitle.phonetics && modalTitle.phonetics[0].text && modalTitle.phonetics[0].text}</Text>
+          </View>
+          {/* <TouchableOpacity onPress={toggleModal}>
+            <Text>Fechar Modal</Text>
+          </TouchableOpacity> */}
+        </View>
+      </Modal>
+    </>
   );
 };
 
@@ -116,4 +148,20 @@ const styles = StyleSheet.create({
     maxWidth: '100%', // Define um tamanho máximo para o texto
     overflow: 'hidden', // Esconde o texto que ultrapassar o tamanho máximo
   },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 16,
+    borderRadius: 8,
+    height: '70%'
+  },
+  modalText: {
+    fontSize: 26,
+    textAlign: 'center',
+    marginBottom: 16
+  },
+  modalContainer: {
+    marginTop: 16,
+    backgroundColor: '#efa8b4',
+    padding: 16
+  }
 });
