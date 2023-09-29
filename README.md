@@ -36,3 +36,5 @@ yarn ios
 - npm install @react-navigation/bottom-tabs
 - npm i @react-native-async-storage/async-storage
 - npm i axios
+- npm i react-native-modal
+

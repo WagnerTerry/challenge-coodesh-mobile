@@ -20,7 +20,7 @@ interface Item {
 export const GridText = () => {
   // Função para renderizar cada item da grade
 
-  const {words, removeWord} = useWordList()
+  const { words, removeWord } = useWordList()
   const [data, setData] = useState<Item[]>([]);
   const [teste, setTeste] = useState<IWord[]>([]);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -57,11 +57,11 @@ export const GridText = () => {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
-  function showWord(){
+  function showWord() {
     console.log("show word")
   }
 
-  function addFavorites(){
+  function addFavorites() {
     console.log("Add favorites")
   }
 
@@ -90,43 +90,51 @@ export const GridText = () => {
 
   return (
     <>
-    <FlatList
-      data={teste as unknown as IWord[]}
-      numColumns={3}
-      renderItem={({ item }) => (
-        <View style={styles.item}>
-          <TouchableOpacity
-          activeOpacity={0.3}
-          onPress={() => openModalWithParam(item)}
-          onLongPress={() => handleRemoveTask(item.id, item.word)}
-          >
-          <Text style={styles.truncatedText}>{item.word}</Text>
+      <FlatList
+        data={teste as unknown as IWord[]}
+        numColumns={3}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <TouchableOpacity
+              activeOpacity={0.3}
+              onPress={() => openModalWithParam(item)}
+              onLongPress={() => handleRemoveTask(item.id, item.word)}
+            >
+              <Text style={styles.truncatedText}>{item.word}</Text>
 
-          </TouchableOpacity>
-        </View>
-      )}
-      keyExtractor={(item) => item.id}
-      //onEndReached={loadMoreData}
-      onEndReachedThreshold={0.1}
-      columnWrapperStyle={styles.columnWrapper}
-    />
-     <Modal isVisible={isModalVisible}>
+            </TouchableOpacity>
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
+        //onEndReached={loadMoreData}
+        onEndReachedThreshold={0.1}
+        columnWrapperStyle={styles.columnWrapper}
+      />
 
+      <Modal isVisible={isModalVisible}>
         <View style={styles.modalContent}>
-        <Icon
+          <Icon
             name='close'
             size={40}
             onPress={toggleModal}
           />
           <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>{modalTitle.word}</Text>
-          <Text style={styles.modalText}>{modalTitle && modalTitle.phonetics && modalTitle.phonetics[0].text && modalTitle.phonetics[0].text}</Text>
+            <Text style={styles.modalText}>{modalTitle.word}</Text>
+            <Text style={styles.modalText}>{modalTitle && modalTitle.phonetics && modalTitle.phonetics[0].text && modalTitle.phonetics[0].text}</Text>
+          </View>
+          <View>
+            <Text style={styles.meaningsTitle}>Meanings</Text>
+            {/* <Text style={styles.meaningsText}>aaa</Text> */}
+            {modalTitle && modalTitle.meanings[0].definitions.map((meaning: any) => (
+              <Text>{meaning.definition}</Text>
+            ))}
           </View>
           {/* <TouchableOpacity onPress={toggleModal}>
             <Text>Fechar Modal</Text>
           </TouchableOpacity> */}
         </View>
       </Modal>
+
     </>
   );
 };
@@ -152,7 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 16,
     borderRadius: 8,
-    height: '70%'
+    height: '70%',
   },
   modalText: {
     fontSize: 26,
@@ -163,5 +171,13 @@ const styles = StyleSheet.create({
     marginTop: 16,
     backgroundColor: '#efa8b4',
     padding: 16
+  },
+  meaningsTitle: {
+    marginTop: 24,
+    marginBottom: 16,
+    fontSize: 30
+  },
+  meaningsText: {
+    fontSize: 18
   }
 });
