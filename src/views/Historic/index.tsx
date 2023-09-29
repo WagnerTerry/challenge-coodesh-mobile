@@ -6,7 +6,7 @@ import { GridText } from '../../components/GridText'
 import {  useWordList } from '../../context/WordsContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-export const Home = () => {
+export const Historic = () => {
 
   const [word, setWord] = useState('')
   const [loading, setLoading] = useState(false);
@@ -76,7 +76,7 @@ export const Home = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Word list</Text>
+          <Text style={styles.title}>Historic</Text>
           <Icon
             name='delete'
             size={30}

@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from '../views/Home';
-import { History } from '../views/History';
+import { Historic } from '../views/Historic';
 // import Ionic from 'react-native-vector-icons/Ionicons';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -31,10 +31,10 @@ export function AppRoutes() {
           }}
         />
         <Screen
-          name="History"
-          component={History}
+          name="Historic"
+          component={Historic}
           options={{
-            tabBarLabel: 'History',
+            tabBarLabel: 'Historic',
             tabBarIcon: ({ focused, color, size }) => (
               <MaterialCommunityIcons name="book" color={color} size={size} />
             ),
