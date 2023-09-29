@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { IWord } from '../../context/WordsContext';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Item {
   id: string;
@@ -24,22 +25,31 @@ export const GridText = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const itemsPerPage: number = 9;
 
-  const loadMoreData = () => {
-    setTimeout(() => {
-      const newData: Item[] = [
-        ...data,
-        { id: `${pageNumber}-1`, text: `Item ${pageNumber * itemsPerPage + 1}` },
-        { id: `${pageNumber}-2`, text: `Item ${pageNumber * itemsPerPage + 2}` },
-        { id: `${pageNumber}-3`, text: `Item ${pageNumber * itemsPerPage + 3}` },
-      ];
-      setData(newData);
-      setPageNumber(pageNumber + 1);
-    }, 1000);
-  };
+  const storeWord = '@StoreWord'
 
   useEffect(() => {
-    loadMoreData();
+    async function loadWords() {
+      const wordList = await AsyncStorage.getItem(storeWord)
+      console.log("load wo", wordList)
+
+      if (wordList) {
+        setTeste(JSON.parse(wordList))
+      }
+    }
+    loadWords()
+    //loadMoreData();
   }, []);
+
+  // const loadMoreData = () => {
+  //   setTimeout(() => {
+  //     const newData: IWord[] = [
+  //       ...teste,
+  //       { id: `${teste.id}`, word: `Item ${pageNumber * itemsPerPage + 1}` },
+  //     ];
+  //     setTeste(newData);
+  //     setPageNumber(pageNumber + 1);
+  //   }, 1000);
+  // };
 
   const truncateText = (text: string, maxLength: number) => {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
@@ -65,7 +75,7 @@ export const GridText = () => {
           onPress={() => showWord()}
           onLongPress={() => addFavorites()}
           >
-          <Text style={styles.truncatedText}>{truncateText(item.word, 20)}</Text>
+          <Text style={styles.truncatedText}>{item.word}</Text>
 
           </TouchableOpacity>
         </View>

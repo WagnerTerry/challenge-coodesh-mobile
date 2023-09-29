@@ -32,7 +32,6 @@ export const WordsProvider: React.FunctionComponent<IProps> = ({ children }) => 
   useEffect(() => {
     async function loadWords() {
       const wordList = await AsyncStorage.getItem(storeWord)
-      console.log("aaaa", wordList)
 
       if (wordList) {
         setData(JSON.parse(wordList))
