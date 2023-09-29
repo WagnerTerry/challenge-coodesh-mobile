@@ -4,6 +4,7 @@ import {fetchWord} from '../../services/DictionaryService'
 import { styles } from './styles'
 import { GridText } from '../../components/GridText'
 import { useWordList } from '../../context/WordsContext'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 export const Home = () => {
 
@@ -11,7 +12,7 @@ export const Home = () => {
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
 
-  const {addWord}= useWordList()
+  const {addWord, removeAllWords}= useWordList()
 
   const handleShowToast = (message: string) => {
     // Exibe uma mensagem de sucesso temporária
@@ -58,13 +59,30 @@ export const Home = () => {
     }
   }
 
+  const clearWordList = () => {
+    Alert.alert('Apagar lista', "Tem certeza de que deseja apagar a lista de palavras?", [
+      {
+        text: "Cancelar",
+        onPress: () => { }
+      }, {
+        text: 'Excluir',
+        onPress: () => removeAllWords()
+      }
+    ])
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+        <View style={styles.header}>
         <Text style={styles.title}>Word list</Text>
-        {/* <View>
-          <Text></Text>
-        </View> */}
+        <Icon
+            name='delete'
+            size={30}
+            color="#eb1c1c"
+            onPress={clearWordList}
+          />
+          </View>
         <TextInput
         style={styles.input}
           placeholder='Search word'

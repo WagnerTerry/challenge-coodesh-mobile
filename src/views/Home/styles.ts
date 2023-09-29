@@ -10,6 +10,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 50,
   },
+  header: {
+    alignContent: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
   title: {
     fontSize: 24,
   },

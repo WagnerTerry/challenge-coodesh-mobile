@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ToastAndroid } from 'react-native';
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface IProps {
@@ -18,8 +17,7 @@ export interface IWordsContext {
   words: IWord[];
   addWord(word: IWord): void;
   removeWord(id: string): void;
-  // completeTask(id: string): void;
-  // removeAllTasks(): void;
+  removeAllWords(): void;
 }
 
 const storeWord = '@StoreWord'
@@ -27,7 +25,7 @@ const storeWord = '@StoreWord'
 export const WordsContext = React.createContext<IWordsContext>({} as IWordsContext)
 
 export const WordsProvider: React.FunctionComponent<IProps> = ({ children }) => {
-  const [data, setData] = useState([] as any)
+  const [data, setData] = useState<IWord[]>([])
 
   useEffect(() => {
     async function loadWords() {
@@ -63,15 +61,15 @@ export const WordsProvider: React.FunctionComponent<IProps> = ({ children }) => 
     }
   }
 
-  // const removeAllTasks = async () => {
-  //   try {
-  //     await AsyncStorage.setItem(tasksData, JSON.stringify([]))
-  //     setData([])
-  //     handleShowToast("Lista apagada")
-  //   } catch (error) {
-  //     console.log("Error removing all list", error)
-  //   }
-  // }
+  const removeAllWords = async () => {
+    try {
+      await AsyncStorage.setItem(storeWord, JSON.stringify([]))
+      setData([])
+      handleShowToast("Palavras removidas")
+    } catch (error) {
+      console.log("Error removing all list", error)
+    }
+  }
 
   const handleShowToast = (message: string) => {
     ToastAndroid.showWithGravityAndOffset(
@@ -86,7 +84,7 @@ export const WordsProvider: React.FunctionComponent<IProps> = ({ children }) => 
 
   return (
     <WordsContext.Provider value={{
-      words: data, addWord, removeWord
+      words: data, addWord, removeWord, removeAllWords
     }}
     >
       {children}
