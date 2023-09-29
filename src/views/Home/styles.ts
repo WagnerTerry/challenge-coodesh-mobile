@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   safeArea: {
@@ -17,11 +17,16 @@ export const styles = StyleSheet.create({
     backgroundColor: '#099',
     color: '#f1f1f1',
     fontSize: 18,
-    // {Platform.OS === 'ios' ? 'padding:15px;' : 'padding:12px;'},
+    padding: Platform.OS === 'ios' ? 16 : 12,
     marginTop: 30,
     paddingHorizontal: 8,
     borderRadius: 8,
     borderColor: 'black',
     width: '100%',
+  },
+  loadingText: {
+    fontSize: 20,
+    marginTop: 16,
+    textAlign: 'center',
   },
 });

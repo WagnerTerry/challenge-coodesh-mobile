@@ -6,11 +6,24 @@ import { styles } from './styles'
 export const Home = () => {
 
   const [word, setWord] = useState('')
+  const [loading, setLoading] = useState(false);
+  const [errorAPI] = useState(null)
 
   async function searchWord(text: string){
-     const word = await fetchWord(text)
-    console.log("aee", word)
-    // setWord(word)
+    try {
+      setLoading(true)
+      const word = await fetchWord(text)
+     console.log("aee", word)
+     // setWord(word)
+     setLoading(false);
+    //  handleShowToast("Tarefa do servidor adicionada")
+
+    } catch(error){
+      console.log("error fetching word data", error)
+      setLoading(false);
+      // handleShowToast("Erro ao buscar tarefas, verifique sua internet, ou tente novamente mais tarde")
+
+    }
   }
 
   return (
@@ -27,7 +40,17 @@ export const Home = () => {
           onChangeText={setWord}
           value={word}
           onBlur={() => searchWord(word)}
+          editable={!loading}
         />
+          {loading ? (
+          <Text style={styles.loadingText}>Carregando Tarefa...</Text>
+        ) : (
+          <>
+            {errorAPI && (
+              <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
+            )}
+          </>
+        )}
       </View>
     </SafeAreaView>
   )
