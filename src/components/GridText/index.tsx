@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, ScrollView, Button } from 'react-native';
 import { IWord, useWordList } from '../../context/WordsContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import Tts from 'react-native-tts';
 
 interface Item {
   id: string;
@@ -20,7 +21,7 @@ interface Item {
 export const GridText = () => {
   // Função para renderizar cada item da grade
 
-  const {words, removeWord} = useWordList()
+  const { words, removeWord } = useWordList()
   const [data, setData] = useState<Item[]>([]);
   const [teste, setTeste] = useState<IWord[]>([]);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -38,9 +39,15 @@ export const GridText = () => {
         setTeste(JSON.parse(wordList))
       }
     }
+    Tts.setDefaultRate(0.5); // Velocidade da fala (0.5 é metade da velocidade normal)
+    Tts.setDefaultPitch(1.0); // Tom da voz (1.0 é o tom padrão)
     loadWords()
     //loadMoreData();
   }, [words]);
+
+  const speakText = (text: string) => {
+    Tts.speak(text);
+  };
 
   // const loadMoreData = () => {
   //   setTimeout(() => {
@@ -57,11 +64,11 @@ export const GridText = () => {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
-  function showWord(){
+  function showWord() {
     console.log("show word")
   }
 
-  function addFavorites(){
+  function addFavorites() {
     console.log("Add favorites")
   }
 
@@ -70,7 +77,6 @@ export const GridText = () => {
   };
 
   const openModalWithParam = (word: any) => {
-    console.log("ansy", word)
     setModalTitle(word); // Define o título do modal com o parâmetro
     toggleModal(); // Abre o modal
   };
@@ -90,46 +96,48 @@ export const GridText = () => {
 
   return (
     <>
-    <FlatList
-      data={teste as unknown as IWord[]}
-      numColumns={3}
-      renderItem={({ item }) => (
-        <View style={styles.item}>
-          <TouchableOpacity
-          activeOpacity={0.3}
-          onPress={() => openModalWithParam(item)}
-          onLongPress={() => handleRemoveTask(item.id, item.word)}
-          >
-          <Text style={styles.truncatedText}>{item.word}</Text>
+      <FlatList
+        data={teste as unknown as IWord[]}
+        numColumns={3}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <TouchableOpacity
+              activeOpacity={0.3}
+              onPress={() => openModalWithParam(item)}
+              onLongPress={() => handleRemoveTask(item.id, item.word)}
+            >
+              <Text style={styles.truncatedText}>{item.word}</Text>
 
-          </TouchableOpacity>
-        </View>
-      )}
-      keyExtractor={(item) => item.id}
-      //onEndReached={loadMoreData}
-      onEndReachedThreshold={0.1}
-      columnWrapperStyle={styles.columnWrapper}
-    />
+            </TouchableOpacity>
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
+        //onEndReached={loadMoreData}
+        onEndReachedThreshold={0.1}
+        columnWrapperStyle={styles.columnWrapper}
+      />
 
-     <Modal isVisible={isModalVisible}>
+      <Modal isVisible={isModalVisible}>
         <View style={styles.modalContent}>
-        <Icon
+          <Icon
             name='close'
             size={40}
             onPress={toggleModal}
           />
           <ScrollView style={styles.scrollView}>
 
-          <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>{modalTitle.word}</Text>
-          <Text style={styles.modalText}>{modalTitle && modalTitle.phonetics && modalTitle.phonetics[0].text && modalTitle.phonetics[0].text}</Text>
-          </View>
-          <View>
-            <Text style={styles.meaningsTitle}>Meanings</Text>
-            {modalTitle && modalTitle.meanings &&  modalTitle.meanings[0].definitions.map((meaning: any) => (
-              <Text>{meaning.definition}</Text>
-            ))}
-          </View>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalText}>{modalTitle.word}</Text>
+              <Text style={styles.modalText}>{modalTitle && modalTitle.phonetics && modalTitle.phonetics[0].text && modalTitle.phonetics[0].text}</Text>
+            </View>
+            <View>
+              <Text style={styles.meaningsTitle}>Meanings</Text>
+              {modalTitle && modalTitle.meanings && modalTitle.meanings[0].definitions.map((meaning: any) => (
+                <Text style={styles.meaningsText} key={meaning.id}>{meaning.definition}</Text>
+              ))}
+              <Button title="Reproduzir palavra" onPress={() => speakText(modalTitle.word)} />
+
+            </View>
           </ScrollView>
 
         </View>
@@ -182,6 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 30
   },
   meaningsText: {
-    fontSize: 18
+    fontSize: 18,
+    marginBottom: 16
   }
 });
