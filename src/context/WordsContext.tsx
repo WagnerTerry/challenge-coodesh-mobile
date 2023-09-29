@@ -17,7 +17,7 @@ export interface IWord {
 export interface IWordsContext {
   words: IWord[];
   addWord(word: IWord): void;
-  // removeTask(id: string): void;
+  removeWord(id: string): void;
   // completeTask(id: string): void;
   // removeAllTasks(): void;
 }
@@ -52,16 +52,16 @@ export const WordsProvider: React.FunctionComponent<IProps> = ({ children }) => 
 
   }
 
-  // const removeTask = async (id: string) => {
-  //   try {
-  //     const newTaskList = data.filter((task) => task.id !== id)
-  //     setData(newTaskList)
-  //     await AsyncStorage.setItem(tasksData, JSON.stringify(newTaskList))
-  //     handleShowToast("Tarefa removida")
-  //   } catch (error) {
-  //     console.log("Error removing task", error)
-  //   }
-  // }
+  const removeWord = async (id: string) => {
+    try {
+      const wordList = data.filter((word: any) => word.id !== id)
+      setData(wordList)
+      await AsyncStorage.setItem(storeWord, JSON.stringify(wordList))
+      handleShowToast("Palavra removida")
+    } catch (error) {
+      console.log("Error removing word", error)
+    }
+  }
 
   // const removeAllTasks = async () => {
   //   try {
@@ -86,7 +86,7 @@ export const WordsProvider: React.FunctionComponent<IProps> = ({ children }) => 
 
   return (
     <WordsContext.Provider value={{
-      words: data, addWord
+      words: data, addWord, removeWord
     }}
     >
       {children}

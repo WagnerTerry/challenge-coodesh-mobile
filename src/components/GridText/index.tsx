@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { IWord } from '../../context/WordsContext';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { IWord, useWordList } from '../../context/WordsContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Item {
   id: string;
   text: string;
 }
-
 
 // const data = [
 //   { id: '1', text: 'Item 1' },
@@ -19,6 +18,7 @@ interface Item {
 export const GridText = () => {
   // Função para renderizar cada item da grade
 
+  const {words, removeWord} = useWordList()
   const [data, setData] = useState<Item[]>([]);
   const [teste, setTeste] = useState<IWord[]>([]);
 
@@ -38,7 +38,7 @@ export const GridText = () => {
     }
     loadWords()
     //loadMoreData();
-  }, []);
+  }, [words]);
 
   // const loadMoreData = () => {
   //   setTimeout(() => {
@@ -63,6 +63,19 @@ export const GridText = () => {
     console.log("Add favorites")
   }
 
+  const handleRemoveTask = (id: string, word: string) => {
+    Alert.alert(word, 'Deseja realmente excluir essa palavra', [
+      {
+        text: "Cancelar",
+        onPress: () => { }
+      },
+      {
+        text: "Excluir",
+        onPress: () => removeWord(id)
+      }
+    ])
+  }
+
 
   return (
     <FlatList
@@ -73,7 +86,7 @@ export const GridText = () => {
           <TouchableOpacity
           activeOpacity={0.3}
           onPress={() => showWord()}
-          onLongPress={() => addFavorites()}
+          onLongPress={() => handleRemoveTask(item.id, item.word)}
           >
           <Text style={styles.truncatedText}>{item.word}</Text>
 
