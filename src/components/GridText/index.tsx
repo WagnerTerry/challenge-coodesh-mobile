@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { IWord } from '../../context/WordsContext';
 
 interface Item {
   id: string;
@@ -18,6 +19,8 @@ export const GridText = () => {
   // Função para renderizar cada item da grade
 
   const [data, setData] = useState<Item[]>([]);
+  const [teste, setTeste] = useState<IWord[]>([]);
+
   const [pageNumber, setPageNumber] = useState<number>(1);
   const itemsPerPage: number = 9;
 
@@ -53,7 +56,7 @@ export const GridText = () => {
 
   return (
     <FlatList
-      data={data}
+      data={teste as unknown as IWord[]}
       numColumns={3}
       renderItem={({ item }) => (
         <View style={styles.item}>
@@ -62,13 +65,13 @@ export const GridText = () => {
           onPress={() => showWord()}
           onLongPress={() => addFavorites()}
           >
-          <Text style={styles.truncatedText}>{truncateText(item.text, 20)}</Text>
+          <Text style={styles.truncatedText}>{truncateText(item.word, 20)}</Text>
 
           </TouchableOpacity>
         </View>
       )}
       keyExtractor={(item) => item.id}
-      onEndReached={loadMoreData}
+      //onEndReached={loadMoreData}
       onEndReachedThreshold={0.1}
       columnWrapperStyle={styles.columnWrapper}
     />

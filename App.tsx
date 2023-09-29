@@ -1,11 +1,13 @@
 import React from 'react'
-import { Home } from './src/views/Home'
 import { AppRoutes } from './src/routes/app.routes'
+import { WordsProvider } from './src/context/WordsContext'
 
 const App = () => {
 
   return (
-   <AppRoutes />
+    <WordsProvider>
+      <AppRoutes />
+    </WordsProvider>
   )
 }
 

@@ -3,12 +3,15 @@ import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } fr
 import {fetchWord} from '../../services/DictionaryService'
 import { styles } from './styles'
 import { GridText } from '../../components/GridText'
+import { useWordList } from '../../context/WordsContext'
 
 export const Home = () => {
 
   const [word, setWord] = useState('')
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
+
+  const {addWord}= useWordList()
 
   const handleShowToast = (message: string) => {
     // Exibe uma mensagem de sucesso temporária
@@ -28,8 +31,21 @@ export const Home = () => {
         return;
       }
       setLoading(true)
-      const word = await fetchWord(text)
-     console.log("aee", word)
+      const newWord = await fetchWord(text)
+      // const data = {
+      //   id: String(new Date().getTime()),
+      //   word: newTask,
+      //   completed: false
+      // }
+      const data = {
+        id: String(new Date().getTime()),
+        word: newWord[0].word,
+        phonetics: newWord[0].phonetics,
+        meanings: newWord[0].meanings
+
+      }
+      //console.log("aee", data)
+    addWord(data)
      // setWord(word)
      setLoading(false);
      handleShowToast("Busca concluída")
