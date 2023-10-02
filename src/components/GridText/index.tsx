@@ -23,20 +23,31 @@ export const GridText = (props: any) => {
   const { words, removeWord } = useWordList()
   // const [data, setData] = useState<Item[]>([])
   const [data, setData] = useState<IWord[]>([]);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [modalTitle, setModalTitle] = useState([] as any);
+  const [favorites, setFavorites] = useState([] as any);
 
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [modalWord, setModalWord] = useState([] as any);
 
   const [pageNumber, setPageNumber] = useState<number>(1);
   const itemsPerPage: number = 9;
 
   const storeWord = '@StoreWord'
+  const favoriteWords = '@FavoriteWords'
 
   useEffect(() => {
     async function loadWords() {
       const wordList = await AsyncStorage.getItem(storeWord)
+      const favoritWords = await AsyncStorage.getItem(favoriteWords)
+
+      //const showMenu = menuRender(props)
+
       if (wordList) {
         setData(JSON.parse(wordList))
+
+      }
+      if (favoritWords) {
+        setFavorites(JSON.parse(favoritWords))
+
       }
     }
     Tts.setDefaultRate(0.5); // Velocidade da fala (0.5 é metade da velocidade normal)
@@ -64,12 +75,17 @@ export const GridText = (props: any) => {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
-  function showWord() {
-    console.log("show word")
-  }
 
-  function addFavorites() {
-    console.log("Add favorites")
+  const addFavorites = async (word: IWord) => {
+    try {
+      const newWord = [...favorites, word]
+      setFavorites(newWord)
+      await AsyncStorage.setItem(favoriteWords, JSON.stringify(newWord))
+    } catch(error){
+      console.log("error saving word", error as string)
+      throw new Error("An error occurred while saving word")
+    }
+
   }
 
   const toggleModal = () => {
@@ -77,7 +93,7 @@ export const GridText = (props: any) => {
   };
 
   const openModalWithParam = (word: any) => {
-    setModalTitle(word); // Define o título do modal com o parâmetro
+    setModalWord(word); // Define o título do modal com o parâmetro
     toggleModal(); // Abre o modal
   };
 
@@ -94,10 +110,21 @@ export const GridText = (props: any) => {
     ])
   }
 
+  const menuRender = (type: any) => {
+    switch (type){
+      case 'wordList':
+        return props
+      case 'favorites':
+        return props
+      default:
+        return 'data'
+    }
+  }
+
   return (
     <>
       <FlatList
-        data={props.wordList ? props.wordList : data}
+        data={props.favorites ? props.favorites : props.wordList ? props.wordList : data}
         numColumns={3}
         renderItem={({ item }) => (
           <View style={styles.item}>
@@ -127,15 +154,18 @@ export const GridText = (props: any) => {
           <ScrollView style={styles.scrollView}>
 
             <View style={styles.modalContainer}>
-              <Text style={styles.modalText}>{modalTitle.word}</Text>
-              <Text style={styles.modalText}>{modalTitle && modalTitle.phonetics && modalTitle.phonetics[0].text && modalTitle.phonetics[0].text}</Text>
+              <Text style={styles.modalText}>{modalWord.word}</Text>
+              <Text style={styles.modalText}>{modalWord && modalWord.phonetics && modalWord.phonetics[0].text && modalWord.phonetics[0].text}</Text>
             </View>
             <View>
               <Text style={styles.meaningsTitle}>Meanings</Text>
-              {modalTitle && modalTitle.meanings && modalTitle.meanings[0].definitions.map((meaning: any, idx: number) => (
-                <Text style={styles.meaningsText} key={`${modalTitle.id}-${meaning.definition}`}>{meaning.definition}</Text>
+              {modalWord && modalWord.meanings && modalWord.meanings[0].definitions.map((meaning: any) => (
+                <Text style={styles.meaningsText} key={`${modalWord.id}-${meaning.definition}`}>{meaning.definition}</Text>
               ))}
-              <Button title="Reproduzir palavra" onPress={() => speakText(modalTitle.word)} />
+              <Button title="Reproduzir palavra" onPress={() => speakText(modalWord.word)} />
+              <TouchableOpacity  onPress={() => addFavorites(modalWord)}>
+                <Text style={styles.favorite}>Adicionar aos favoritos</Text>
+              </TouchableOpacity>
 
             </View>
           </ScrollView>
@@ -192,5 +222,14 @@ const styles = StyleSheet.create({
   meaningsText: {
     fontSize: 18,
     marginBottom: 16
+  },
+  favorite: {
+    marginTop: 16,
+    backgroundColor: '#e3d925',
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#902872',
+    height: 30
   }
+
 });

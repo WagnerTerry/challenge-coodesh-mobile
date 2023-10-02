@@ -15,7 +15,7 @@ export const Home = () => {
   const [list, setList ] = useState([] as any)
 
 
-  const { words, addWord, removeAllWords } = useWordList()
+  const { words, addWord } = useWordList()
 
   useEffect(() => {
     setList(WordList)
@@ -65,18 +65,6 @@ export const Home = () => {
       setLoading(false);
       handleShowToast("Ocorreu um erro ao buscar palavra, tente novamente mais tarde, ou verifique a internet")
     }
-  }
-
-  const clearWordList = () => {
-    Alert.alert('Apagar lista', "Tem certeza de que deseja apagar a lista de palavras?", [
-      {
-        text: "Cancelar",
-        onPress: () => { }
-      }, {
-        text: 'Excluir',
-        onPress: () => removeAllWords()
-      }
-    ])
   }
 
   return (
