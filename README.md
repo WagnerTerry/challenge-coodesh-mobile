@@ -38,3 +38,16 @@ yarn ios
 - npm i axios
 - npm i react-native-modal
 
+## Remover warning do react-native-tts
+- É necessário fazer uma atualização dentro do node_modules para remover o warning da biblioteca tts
+- caminho: node_modules/react-native-tts/android/src/main/java/net/no_mad/tts/texttospeechmodule.java
+
+- dentro do arquivo, digitar esse código
+  @ReactMethod
+    public void addListener(String eventname) {
+      // keep: required for rn built in event emitter calls.
+    }
+  @ReactMethod
+    public void removeListeners(Integer count) {
+      // keep: required for rn built in event emitter calls.
+    }
