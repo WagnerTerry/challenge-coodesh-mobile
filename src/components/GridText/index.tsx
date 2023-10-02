@@ -5,35 +5,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Tts from 'react-native-tts';
-interface Item {
-  id: string;
-  text: string;
-}
-
-// const data = [
-//   { id: '1', text: 'Item 1' },
-//   { id: '2', text: 'Item 2' },
-//   { id: '3', text: 'Item 3' },
-//   // Adicione mais itens conforme necessário
-// ];
 
 export const GridText = (props: any) => {
   // Função para renderizar cada item da grade
 
   const { words, removeWord, handleShowToast } = useWordList()
-  // const [data, setData] = useState<Item[]>([])
   const [data, setData] = useState<IWord[]>([]);
   const [favorites, setFavorites] = useState([] as any);
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalWord, setModalWord] = useState([] as any);
 
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const itemsPerPage: number = 9;
-
   const storeWord = '@StoreWord'
   const favoriteWords = '@FavoriteWords'
-
 
   useEffect(() => {
     async function loadWords() {
@@ -52,28 +36,11 @@ export const GridText = (props: any) => {
     Tts.setDefaultRate(0.5); // Velocidade da fala (0.5 é metade da velocidade normal)
     Tts.setDefaultPitch(1.0); // Tom da voz (1.0 é o tom padrão)
     loadWords()
-    //loadMoreData();
   }, [words]);
 
   const speakText = (text: string) => {
     Tts.speak(text);
   };
-
-  // const loadMoreData = () => {
-  //   setTimeout(() => {
-  //     const newData: IWord[] = [
-  //       ...teste,
-  //       { id: `${teste.id}`, word: `Item ${pageNumber * itemsPerPage + 1}` },
-  //     ];
-  //     setTeste(newData);
-  //     setPageNumber(pageNumber + 1);
-  //   }, 1000);
-  // };
-
-  const truncateText = (text: string, maxLength: number) => {
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-  };
-
 
   const addFavorites = async (word: IWord) => {
     try {
@@ -86,7 +53,6 @@ export const GridText = (props: any) => {
       console.log("error saving word", error as string)
       throw new Error("An error occurred while saving word")
     }
-
   }
 
   const toggleModal = () => {
@@ -129,7 +95,6 @@ export const GridText = (props: any) => {
           </View>
         )}
         keyExtractor={(item) => item.id}
-        //onEndReached={loadMoreData}
         onEndReachedThreshold={0.1}
         columnWrapperStyle={styles.columnWrapper}
       />

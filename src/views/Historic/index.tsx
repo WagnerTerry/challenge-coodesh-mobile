@@ -103,7 +103,6 @@ export const Historic = () => {
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
             ) : <View>
               <GridText />
-              {/* <Text>aaaa</Text> */}
             </View>}
           </>
         )}

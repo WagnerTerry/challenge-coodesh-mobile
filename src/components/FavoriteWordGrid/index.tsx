@@ -28,13 +28,11 @@ export const FavoriteWordGrid = (props: any) => {
     Tts.setDefaultRate(0.5); // Velocidade da fala (0.5 é metade da velocidade normal)
     Tts.setDefaultPitch(1.0); // Tom da voz (1.0 é o tom padrão)
     loadWords()
-    //loadMoreData();
   }, [favorites]);
 
   const speakText = (text: string) => {
     Tts.speak(text);
   };
-
 
   const addFavorites = async (word: IWord) => {
     try {
@@ -47,7 +45,6 @@ export const FavoriteWordGrid = (props: any) => {
       console.log("error saving word", error as string)
       throw new Error("An error occurred while saving word")
     }
-
   }
 
   const toggleModal = () => {

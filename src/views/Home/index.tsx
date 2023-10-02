@@ -3,8 +3,7 @@ import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } fr
 import { fetchWord } from '../../services/DictionaryService'
 import { styles } from '../../style/styles'
 import { GridText } from '../../components/GridText'
-import {  useWordList } from '../../context/WordsContext'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import { useWordList } from '../../context/WordsContext'
 import WordList from '../../utils/wordList.json'
 
 export const Home = () => {
@@ -13,7 +12,6 @@ export const Home = () => {
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
   const [list, setList ] = useState([] as any)
-
 
   const { words, addWord } = useWordList()
 
@@ -55,6 +53,7 @@ export const Home = () => {
 
       }
       addWord(data)
+      setList([...list, data])
       setWord('')
       setLoading(false);
       handleShowToast("Busca concluída")
@@ -89,7 +88,7 @@ export const Home = () => {
             {errorAPI ? (
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
             ) : <View>
-              <GridText wordList={WordList}/>
+              <GridText wordList={list}/>
             </View>}
           </>
         )}
