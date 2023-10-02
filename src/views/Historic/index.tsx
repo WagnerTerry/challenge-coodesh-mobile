@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } from 'react-native'
 import { fetchWord } from '../../services/DictionaryService'
-import { styles } from './styles'
+import { styles } from '../../style/styles'
 import { GridText } from '../../components/GridText'
 import {  useWordList } from '../../context/WordsContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'

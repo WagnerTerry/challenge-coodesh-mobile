@@ -15,6 +15,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
+  headerWithOutInput: {
+    alignContent: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginBottom: 80,
+  },
   title: {
     fontSize: 24,
   },

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } from 'react-native'
-import { fetchWord } from '../../services/DictionaryService'
-import { styles } from './styles'
+import { styles } from '../../style/styles'
 import { GridText } from '../../components/GridText'
 import {  useWordList } from '../../context/WordsContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -9,7 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const Favorites = () => {
 
-  const [word, setWord] = useState('')
   const [favoriteWords, setFavoritesWords] = useState('')
 
   const [loading, setLoading] = useState(false);
@@ -42,40 +40,6 @@ export const Favorites = () => {
     );
   }
 
-  async function searchWord(text: string) {
-    try {
-      if (text.trim() === '') {
-        Alert.alert("Campo vazio", "Por favor, busque por uma palavra")
-        return;
-      }
-      setLoading(true)
-      const newWord = await fetchWord(text)
-      const checkRepeatedWord = words.filter((wordRepeated) => wordRepeated.word.toUpperCase() === text.toUpperCase())
-      if(checkRepeatedWord.length > 0){
-        Alert.alert('Palavra repetida', "Essa palavra já foi registrada")
-        setLoading(false);
-        setWord('')
-        return;
-      }
-      const data = {
-        id: String(new Date().getTime()),
-        word: newWord[0].word,
-        phonetics: newWord[0].phonetics,
-        meanings: newWord[0].meanings
-
-      }
-      addWord(data)
-      setWord('')
-      setLoading(false);
-      handleShowToast("Busca concluída")
-
-
-    } catch (error) {
-      console.log("error fetching word data", error)
-      setLoading(false);
-      handleShowToast("Ocorreu um erro ao buscar palavra, tente novamente mais tarde, ou verifique a internet")
-    }
-  }
 
   const clearWordList = () => {
     Alert.alert('Apagar lista', "Tem certeza de que deseja apagar a lista de palavras?", [
@@ -92,7 +56,7 @@ export const Favorites = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <View style={styles.header}>
+        <View style={styles.headerWithOutInput}>
           <Text style={styles.title}>Favorites</Text>
           <Icon
             name='delete'
@@ -101,7 +65,7 @@ export const Favorites = () => {
             onPress={clearWordList}
           />
         </View>
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder='Search word'
           placeholderTextColor={'#b4bec7'}
@@ -109,7 +73,7 @@ export const Favorites = () => {
           value={word}
           onBlur={() => searchWord(word)}
           editable={!loading}
-        />
+        /> */}
         {loading ? (
           <Text style={styles.loadingText}>Buscando Palavra...</Text>
         ) : (
