@@ -34,6 +34,7 @@ export const GridText = (props: any) => {
   const storeWord = '@StoreWord'
   const favoriteWords = '@FavoriteWords'
 
+
   useEffect(() => {
     async function loadWords() {
       const wordList = await AsyncStorage.getItem(storeWord)
@@ -113,7 +114,7 @@ export const GridText = (props: any) => {
   return (
     <>
       <FlatList
-        data={props.wordList ? props.wordList : data}
+        data={props.wordList ? [...props.wordList].reverse() : [...data].reverse()}
         numColumns={3}
         renderItem={({ item }) => (
           <View style={styles.item}>
