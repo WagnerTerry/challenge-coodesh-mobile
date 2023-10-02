@@ -8,7 +8,7 @@ import Tts from 'react-native-tts';
 
 export const FavoriteWordGrid = (props: any) => {
 
-  const { words, removeWord } = useWordList()
+  const { handleShowToast } = useWordList()
   const [favorites, setFavorites] = useState([] as any);
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -41,6 +41,8 @@ export const FavoriteWordGrid = (props: any) => {
       const newWord = [...favorites, word]
       setFavorites(newWord)
       await AsyncStorage.setItem(favoriteWords, JSON.stringify(newWord))
+      handleShowToast("Palavra Adicionada aos favoritos")
+
     } catch(error){
       console.log("error saving word", error as string)
       throw new Error("An error occurred while saving word")
@@ -62,7 +64,7 @@ export const FavoriteWordGrid = (props: any) => {
       const wordList = favorites.filter((word: any) => word.id !== id)
       setFavorites(wordList)
       await AsyncStorage.setItem(favoriteWords, JSON.stringify(wordList))
-      // handleShowToast("Palavra removida")
+      handleShowToast("Palavra removida dos favoritos")
     } catch (error) {
       console.log("Error removing word", error)
     }

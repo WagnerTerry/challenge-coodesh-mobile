@@ -20,7 +20,7 @@ interface Item {
 export const GridText = (props: any) => {
   // Função para renderizar cada item da grade
 
-  const { words, removeWord } = useWordList()
+  const { words, removeWord, handleShowToast } = useWordList()
   // const [data, setData] = useState<Item[]>([])
   const [data, setData] = useState<IWord[]>([]);
   const [favorites, setFavorites] = useState([] as any);
@@ -79,6 +79,8 @@ export const GridText = (props: any) => {
       const newWord = [...favorites, word]
       setFavorites(newWord)
       await AsyncStorage.setItem(favoriteWords, JSON.stringify(newWord))
+      handleShowToast("Palavra Adicionada aos favoritos")
+
     } catch(error){
       console.log("error saving word", error as string)
       throw new Error("An error occurred while saving word")

@@ -18,6 +18,7 @@ export interface IWordsContext {
   addWord(word: IWord): void;
   removeWord(id: string): void;
   removeAllWords(): void;
+  handleShowToast(word: string): void;
 }
 
 const storeWord = '@StoreWord'
@@ -43,6 +44,8 @@ export const WordsProvider: React.FunctionComponent<IProps> = ({ children }) => 
       const newWord = [...data, word]
       setData(newWord)
       await AsyncStorage.setItem(storeWord, JSON.stringify(newWord))
+      handleShowToast("Palavra Adicionada")
+
     } catch (error) {
       console.log("error saving word", error as string)
       throw new Error("An error occurred while saving word")
@@ -84,7 +87,7 @@ export const WordsProvider: React.FunctionComponent<IProps> = ({ children }) => 
 
   return (
     <WordsContext.Provider value={{
-      words: data, addWord, removeWord, removeAllWords
+      words: data, addWord, removeWord, removeAllWords, handleShowToast
     }}
     >
       {children}
