@@ -11,26 +11,27 @@ export const Favorites = () => {
 
   const { removeWord } = useWordList()
 
-  const [favoriteWords, setFavoritesWords] = useState([])
+  const [favorites, setFavorites] = useState([])
 
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
 
 
   const { words, addWord, removeAllWords } = useWordList()
-  const favorites = '@FavoriteWords'
+  const favoriteWords = '@FavoriteWords'
+
 
 
   useEffect(() => {
     async function loadWords() {
-      const favorite = await AsyncStorage.getItem(favorites)
+      const favorite = await AsyncStorage.getItem(favoriteWords)
 
       if (favorite) {
-        setFavoritesWords(JSON.parse(favorite))
+        setFavorites(JSON.parse(favorite))
       }
     }
     loadWords()
-  }, [favoriteWords])
+  }, [favorites])
 
   const handleShowToast = (message: string) => {
     // Exibe uma mensagem de sucesso temporária
@@ -45,9 +46,9 @@ export const Favorites = () => {
 
   const removeFavoriteWord = async (id: string) => {
     try {
-      const removeFavorite = favoriteWords.filter((word: any) => word.id !== id)
-      setFavoritesWords(removeFavorite)
-      await AsyncStorage.setItem(favorites, JSON.stringify(removeFavorite))
+      const removeFavorite = favorites.filter((word: any) => word.id !== id)
+      setFavorites(removeFavorite)
+      await AsyncStorage.setItem(favoriteWords, JSON.stringify(removeFavorite))
       handleShowToast("Palavra removida")
     } catch (error) {
       console.log("Error removing word", error)
@@ -67,15 +68,24 @@ export const Favorites = () => {
     ])
   }
 
+  const removeAllFavoriteWords = async () => {
+    try {
+      await AsyncStorage.setItem(favoriteWords, JSON.stringify([]))
+      setFavorites([])
+      handleShowToast("Favoritos removidos")
+    } catch (error) {
+      console.log("Error removing all list", error)
+    }
+  }
 
-  const clearWordList = () => {
-    Alert.alert('Apagar lista', "Tem certeza de que deseja apagar a lista de palavras?", [
+  const clearFavorites = () => {
+    Alert.alert('Apagar lista de favoritos', "Tem certeza de que deseja apagar os favoritos?", [
       {
         text: "Cancelar",
         onPress: () => { }
       }, {
         text: 'Excluir',
-        onPress: () => removeAllWords()
+        onPress: () => removeAllFavoriteWords()
       }
     ])
   }
@@ -85,22 +95,15 @@ export const Favorites = () => {
       <View style={styles.container}>
         <View style={styles.headerWithOutInput}>
           <Text style={styles.title}>Favorites</Text>
-          <Icon
-            name='delete'
-            size={30}
-            color="#eb1c1c"
-            onPress={clearWordList}
-          />
+          {favorites.length > 0 && (
+            <Icon
+              name='delete'
+              size={30}
+              color="#eb1c1c"
+              onPress={clearFavorites}
+            />
+          )}
         </View>
-        {/* <TextInput
-          style={styles.input}
-          placeholder='Search word'
-          placeholderTextColor={'#b4bec7'}
-          onChangeText={setWord}
-          value={word}
-          onBlur={() => searchWord(word)}
-          editable={!loading}
-        /> */}
         {loading ? (
           <Text style={styles.loadingText}>Buscando Palavra...</Text>
         ) : (

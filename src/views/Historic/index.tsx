@@ -77,12 +77,14 @@ export const Historic = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Historic</Text>
-          <Icon
-            name='delete'
-            size={30}
-            color="#eb1c1c"
-            onPress={clearWordList}
-          />
+          {words.length > 0 && (
+            <Icon
+              name='delete'
+              size={30}
+              color="#eb1c1c"
+              onPress={clearWordList}
+            />
+          )}
         </View>
         <TextInput
           style={styles.input}
