@@ -5,7 +5,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Tts from 'react-native-tts';
-import wordList from '../../utils/wordList.json'
 interface Item {
   id: string;
   text: string;
@@ -18,11 +17,10 @@ interface Item {
 //   // Adicione mais itens conforme necessário
 // ];
 
-export const GridText = () => {
+export const GridText = (props: any) => {
   // Função para renderizar cada item da grade
 
   const { words, removeWord } = useWordList()
-  const [list, setList ] = useState([] as any)
   // const [data, setData] = useState<Item[]>([])
   const [data, setData] = useState<IWord[]>([]);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -44,7 +42,6 @@ export const GridText = () => {
     Tts.setDefaultRate(0.5); // Velocidade da fala (0.5 é metade da velocidade normal)
     Tts.setDefaultPitch(1.0); // Tom da voz (1.0 é o tom padrão)
     loadWords()
-    setList(wordList)
     //loadMoreData();
   }, [words]);
 
@@ -100,7 +97,7 @@ export const GridText = () => {
   return (
     <>
       <FlatList
-        data={data as unknown as IWord[]}
+        data={props.wordList ? props.wordList : data}
         numColumns={3}
         renderItem={({ item }) => (
           <View style={styles.item}>

@@ -1,18 +1,25 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } from 'react-native'
 import { fetchWord } from '../../services/DictionaryService'
 import { styles } from './styles'
 import { GridText } from '../../components/GridText'
 import {  useWordList } from '../../context/WordsContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import WordList from '../../utils/wordList.json'
 
 export const Home = () => {
 
   const [word, setWord] = useState('')
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
+  const [list, setList ] = useState([] as any)
+
 
   const { words, addWord, removeAllWords } = useWordList()
+
+  useEffect(() => {
+    setList(WordList)
+  }, [])
 
   const handleShowToast = (message: string) => {
     // Exibe uma mensagem de sucesso temporária
@@ -77,12 +84,6 @@ export const Home = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Word list</Text>
-          <Icon
-            name='delete'
-            size={30}
-            color="#eb1c1c"
-            onPress={clearWordList}
-          />
         </View>
         <TextInput
           style={styles.input}
@@ -100,8 +101,7 @@ export const Home = () => {
             {errorAPI ? (
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
             ) : <View>
-              <GridText />
-              {/* <Text>aaaa</Text> */}
+              <GridText wordList={WordList}/>
             </View>}
           </>
         )}
