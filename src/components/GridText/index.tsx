@@ -97,7 +97,7 @@ export const GridText = (props: any) => {
     toggleModal(); // Abre o modal
   };
 
-  const handleRemoveTask = (id: string, word: string) => {
+  const handleRemoveWord = (id: string, word: string) => {
     Alert.alert(word, 'Deseja realmente excluir essa palavra', [
       {
         text: "Cancelar",
@@ -131,7 +131,7 @@ export const GridText = (props: any) => {
             <TouchableOpacity
               activeOpacity={0.3}
               onPress={() => openModalWithParam(item)}
-              onLongPress={() => handleRemoveTask(item.id, item.word)}
+              onLongPress={() => handleRemoveWord(item.id, item.word)}
             >
               <Text style={styles.truncatedText}>{item.word}</Text>
 

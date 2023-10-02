@@ -8,7 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const Favorites = () => {
 
-  const [favoriteWords, setFavoritesWords] = useState('')
+  const { removeWord } = useWordList()
+
+  const [favoriteWords, setFavoritesWords] = useState([])
 
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
@@ -38,6 +40,30 @@ export const Favorites = () => {
       25, // Deslocamento vertical em pixels
       50 // Deslocamento horizontal em pixels
     );
+  }
+
+  const removeFavoriteWord = async (id: string) => {
+    try {
+      const removeFavorite = favoriteWords.filter((word: any) => word.id !== id)
+      setFavoritesWords(removeFavorite)
+      await AsyncStorage.setItem(favorites, JSON.stringify(removeFavorite))
+      handleShowToast("Palavra removida")
+    } catch (error) {
+      console.log("Error removing word", error)
+    }
+  }
+
+  const handleRemoveWord = (id: string, word: string) => {
+    Alert.alert(word, 'Deseja realmente excluir essa palavra', [
+      {
+        text: "Cancelar",
+        onPress: () => { }
+      },
+      {
+        text: "Excluir",
+        onPress: () => removeFavoriteWord(id)
+      }
+    ])
   }
 
 

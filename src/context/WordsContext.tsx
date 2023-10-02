@@ -7,7 +7,7 @@ interface IProps {
 }
 
 export interface IWord {
-  id?: string;
+  id: string;
   word: string;
   phonetics: [];
   meanings: []
