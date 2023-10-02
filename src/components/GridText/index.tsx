@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Tts from 'react-native-tts';
-
+import wordList from '../../utils/wordList.json'
 interface Item {
   id: string;
   text: string;
@@ -22,11 +22,12 @@ export const GridText = () => {
   // Função para renderizar cada item da grade
 
   const { words, removeWord } = useWordList()
-  const [wordList, setWordList ] = useState([] as any)
-  const [data, setData] = useState<Item[]>([])
-  const [teste, setTeste] = useState<IWord[]>([]);
+  const [list, setList ] = useState([] as any)
+  // const [data, setData] = useState<Item[]>([])
+  const [data, setData] = useState<IWord[]>([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState([] as any);
+
 
   const [pageNumber, setPageNumber] = useState<number>(1);
   const itemsPerPage: number = 9;
@@ -37,12 +38,13 @@ export const GridText = () => {
     async function loadWords() {
       const wordList = await AsyncStorage.getItem(storeWord)
       if (wordList) {
-        setTeste(JSON.parse(wordList))
+        setData(JSON.parse(wordList))
       }
     }
     Tts.setDefaultRate(0.5); // Velocidade da fala (0.5 é metade da velocidade normal)
     Tts.setDefaultPitch(1.0); // Tom da voz (1.0 é o tom padrão)
     loadWords()
+    setList(wordList)
     //loadMoreData();
   }, [words]);
 
@@ -98,7 +100,7 @@ export const GridText = () => {
   return (
     <>
       <FlatList
-        data={teste as unknown as IWord[]}
+        data={data as unknown as IWord[]}
         numColumns={3}
         renderItem={({ item }) => (
           <View style={styles.item}>
@@ -134,7 +136,7 @@ export const GridText = () => {
             <View>
               <Text style={styles.meaningsTitle}>Meanings</Text>
               {modalTitle && modalTitle.meanings && modalTitle.meanings[0].definitions.map((meaning: any, idx: number) => (
-                <Text style={styles.meaningsText} key={idx}>{meaning.definition}</Text>
+                <Text style={styles.meaningsText} key={`${modalTitle.id}-${meaning.definition}`}>{meaning.definition}</Text>
               ))}
               <Button title="Reproduzir palavra" onPress={() => speakText(modalTitle.word)} />
 
