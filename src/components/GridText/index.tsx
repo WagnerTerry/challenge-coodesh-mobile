@@ -22,7 +22,8 @@ export const GridText = () => {
   // Função para renderizar cada item da grade
 
   const { words, removeWord } = useWordList()
-  const [data, setData] = useState<Item[]>([]);
+  const [wordList, setWordList ] = useState([] as any)
+  const [data, setData] = useState<Item[]>([])
   const [teste, setTeste] = useState<IWord[]>([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState([] as any);
@@ -132,8 +133,8 @@ export const GridText = () => {
             </View>
             <View>
               <Text style={styles.meaningsTitle}>Meanings</Text>
-              {modalTitle && modalTitle.meanings && modalTitle.meanings[0].definitions.map((meaning: any) => (
-                <Text style={styles.meaningsText} key={meaning.id}>{meaning.definition}</Text>
+              {modalTitle && modalTitle.meanings && modalTitle.meanings[0].definitions.map((meaning: any, idx: number) => (
+                <Text style={styles.meaningsText} key={idx}>{meaning.definition}</Text>
               ))}
               <Button title="Reproduzir palavra" onPress={() => speakText(modalTitle.word)} />
 
