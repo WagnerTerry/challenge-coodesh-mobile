@@ -5,6 +5,7 @@ import { GridText } from '../../components/GridText'
 import {  useWordList } from '../../context/WordsContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { FavoriteWordGrid } from '../../components/FavoriteWordGrid'
 
 export const Favorites = () => {
 
@@ -107,7 +108,7 @@ export const Favorites = () => {
             {errorAPI ? (
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
             ) : <View>
-              <GridText favorites={favoriteWords}/>
+              <FavoriteWordGrid/>
             </View>}
           </>
         )}

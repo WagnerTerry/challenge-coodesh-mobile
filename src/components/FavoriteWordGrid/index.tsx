@@ -5,44 +5,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Tts from 'react-native-tts';
-interface Item {
-  id: string;
-  text: string;
-}
 
-// const data = [
-//   { id: '1', text: 'Item 1' },
-//   { id: '2', text: 'Item 2' },
-//   { id: '3', text: 'Item 3' },
-//   // Adicione mais itens conforme necessário
-// ];
-
-export const GridText = (props: any) => {
-  // Função para renderizar cada item da grade
+export const FavoriteWordGrid = (props: any) => {
 
   const { words, removeWord } = useWordList()
-  // const [data, setData] = useState<Item[]>([])
-  const [data, setData] = useState<IWord[]>([]);
   const [favorites, setFavorites] = useState([] as any);
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalWord, setModalWord] = useState([] as any);
 
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const itemsPerPage: number = 9;
-
-  const storeWord = '@StoreWord'
   const favoriteWords = '@FavoriteWords'
 
   useEffect(() => {
     async function loadWords() {
-      const wordList = await AsyncStorage.getItem(storeWord)
       const favoritWords = await AsyncStorage.getItem(favoriteWords)
 
-      if (wordList) {
-        setData(JSON.parse(wordList))
-
-      }
       if (favoritWords) {
         setFavorites(JSON.parse(favoritWords))
 
@@ -52,25 +29,10 @@ export const GridText = (props: any) => {
     Tts.setDefaultPitch(1.0); // Tom da voz (1.0 é o tom padrão)
     loadWords()
     //loadMoreData();
-  }, [words]);
+  }, [favorites]);
 
   const speakText = (text: string) => {
     Tts.speak(text);
-  };
-
-  // const loadMoreData = () => {
-  //   setTimeout(() => {
-  //     const newData: IWord[] = [
-  //       ...teste,
-  //       { id: `${teste.id}`, word: `Item ${pageNumber * itemsPerPage + 1}` },
-  //     ];
-  //     setTeste(newData);
-  //     setPageNumber(pageNumber + 1);
-  //   }, 1000);
-  // };
-
-  const truncateText = (text: string, maxLength: number) => {
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
 
@@ -95,7 +57,18 @@ export const GridText = (props: any) => {
     toggleModal(); // Abre o modal
   };
 
-  const handleRemoveWord = (id: string, word: string) => {
+  const removeFavoriteWord = async (id: string) => {
+    try {
+      const wordList = favorites.filter((word: any) => word.id !== id)
+      setFavorites(wordList)
+      await AsyncStorage.setItem(favoriteWords, JSON.stringify(wordList))
+      // handleShowToast("Palavra removida")
+    } catch (error) {
+      console.log("Error removing word", error)
+    }
+  }
+
+  const handleRemoveFavoriteWord = (id: string, word: string) => {
     Alert.alert(word, 'Deseja realmente excluir essa palavra', [
       {
         text: "Cancelar",
@@ -103,7 +76,7 @@ export const GridText = (props: any) => {
       },
       {
         text: "Excluir",
-        onPress: () => removeWord(id)
+        onPress: () => removeFavoriteWord(id)
       }
     ])
   }
@@ -111,14 +84,14 @@ export const GridText = (props: any) => {
   return (
     <>
       <FlatList
-        data={props.wordList ? props.wordList : data}
+        data={favorites}
         numColumns={3}
         renderItem={({ item }) => (
           <View style={styles.item}>
             <TouchableOpacity
               activeOpacity={0.3}
               onPress={() => openModalWithParam(item)}
-              onLongPress={() => handleRemoveWord(item.id, item.word)}
+              onLongPress={() => handleRemoveFavoriteWord(item.id, item.word)}
             >
               <Text style={styles.truncatedText}>{item.word}</Text>
 
@@ -126,7 +99,6 @@ export const GridText = (props: any) => {
           </View>
         )}
         keyExtractor={(item) => item.id}
-        //onEndReached={loadMoreData}
         onEndReachedThreshold={0.1}
         columnWrapperStyle={styles.columnWrapper}
       />
