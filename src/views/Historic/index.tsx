@@ -50,7 +50,6 @@ export const Historic = () => {
       addWord(data)
       setWord('')
       setLoading(false);
-      handleShowToast("Busca concluída")
 
 
     } catch (error) {

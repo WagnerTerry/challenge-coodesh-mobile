@@ -56,8 +56,6 @@ export const Home = () => {
       setList([...list, data])
       setWord('')
       setLoading(false);
-      handleShowToast("Busca concluída")
-
 
     } catch (error) {
       console.log("error fetching word data", error)
