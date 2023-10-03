@@ -3,7 +3,7 @@ import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } fr
 import { fetchWord } from '../../services/DictionaryService'
 import { styles } from '../../style/styles'
 import { GridText } from '../../components/GridText'
-import { useWordList } from '../../context/WordsContext'
+import { IWord, useWordList } from '../../context/WordsContext'
 import WordList from '../../utils/wordList.json'
 
 export const Home = () => {
@@ -38,7 +38,7 @@ export const Home = () => {
       }
       setLoading(true)
       const newWord = await fetchWord(text)
-      const checkRepeatedWord = words.filter((wordRepeated) => wordRepeated.word.toUpperCase() === text.toUpperCase())
+      const checkRepeatedWord = list.filter((wordRepeated: IWord) => wordRepeated.word.toUpperCase() === text.toUpperCase())
       if(checkRepeatedWord.length > 0){
         Alert.alert('Palavra repetida', "Essa palavra já foi registrada")
         setLoading(false);

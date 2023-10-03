@@ -42,9 +42,16 @@ export const GridText = (props: any) => {
     Tts.speak(text);
   };
 
-  const addFavorites = async (word: IWord) => {
+  const addFavorites = async (modalItem: any) => {
     try {
-      const newWord = [...favorites, word]
+      const checkRepeatedWord = favorites.filter((wordRepeated: IWord) => wordRepeated.word.toLowerCase() === modalItem.word.toLowerCase())
+      if(checkRepeatedWord.length > 0){
+        Alert.alert('Palavra repetida', "Essa palavra já foi registrada")
+        return;
+      }
+
+
+      const newWord = [...favorites, modalItem]
       setFavorites(newWord)
       await AsyncStorage.setItem(favoriteWords, JSON.stringify(newWord))
       handleShowToast("Palavra Adicionada aos favoritos")
@@ -118,7 +125,7 @@ export const GridText = (props: any) => {
                 <Text style={styles.meaningsText} key={`${modalWord.id}-${meaning.definition}`}>{meaning.definition}</Text>
               ))}
               <Button title="Reproduzir palavra" onPress={() => speakText(modalWord.word)} />
-              <TouchableOpacity  onPress={() => addFavorites(modalWord)}>
+              <TouchableOpacity onPress={() => addFavorites(modalWord)}>
                 <Text style={styles.favorite}>Adicionar aos favoritos</Text>
               </TouchableOpacity>
 
