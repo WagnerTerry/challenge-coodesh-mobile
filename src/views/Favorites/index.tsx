@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } from 'react-native'
 import { styles } from '../../style/styles'
-import { GridText } from '../../components/GridText'
-import {  useWordList } from '../../context/WordsContext'
+import { IWord, useWordList } from '../../context/WordsContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { FavoriteWordGrid } from '../../components/FavoriteWordGrid'
@@ -11,7 +10,7 @@ export const Favorites = () => {
 
   const { handleShowToast } = useWordList()
 
-  const [favorites, setFavorites] = useState([])
+  const [favorites, setFavorites] = useState<IWord[]>([])
 
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
@@ -27,18 +26,7 @@ export const Favorites = () => {
       }
     }
     loadWords()
-  }, [favorites])
-
-  const removeFavoriteWord = async (id: string) => {
-    try {
-      const removeFavorite = favorites.filter((word: any) => word.id !== id)
-      setFavorites(removeFavorite)
-      await AsyncStorage.setItem(favoriteWords, JSON.stringify(removeFavorite))
-      handleShowToast("Palavra removida")
-    } catch (error) {
-      console.log("Error removing word", error)
-    }
-  }
+  }, [])
 
   const removeAllFavoriteWords = async () => {
     try {

@@ -36,7 +36,7 @@ export const GridText = (props: any) => {
     Tts.setDefaultRate(0.5); // Velocidade da fala (0.5 é metade da velocidade normal)
     Tts.setDefaultPitch(1.0); // Tom da voz (1.0 é o tom padrão)
     loadWords()
-  }, [words]);
+  }, [words, favorites]);
 
   const speakText = (text: string) => {
     Tts.speak(text);
@@ -49,7 +49,6 @@ export const GridText = (props: any) => {
         Alert.alert('Palavra repetida', "Essa palavra já foi registrada")
         return;
       }
-
 
       const newWord = [...favorites, modalItem]
       setFavorites(newWord)
