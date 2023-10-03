@@ -24,6 +24,9 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 24,
   },
+  scrollView: {
+    flex: 1,
+  },
   input: {
     backgroundColor: '#099',
     color: '#f1f1f1',

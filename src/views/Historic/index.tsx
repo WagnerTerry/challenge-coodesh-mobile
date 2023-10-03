@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } from 'react-native'
+import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList, ScrollView } from 'react-native'
 import { fetchWord } from '../../services/DictionaryService'
 import { styles } from '../../style/styles'
 import { GridText } from '../../components/GridText'
-import {  useWordList } from '../../context/WordsContext'
+import { useWordList } from '../../context/WordsContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 export const Historic = () => {
@@ -34,7 +34,7 @@ export const Historic = () => {
       setLoading(true)
       const newWord = await fetchWord(text)
       const checkRepeatedWord = words.filter((wordRepeated) => wordRepeated.word.toUpperCase() === text.toUpperCase())
-      if(checkRepeatedWord.length > 0){
+      if (checkRepeatedWord.length > 0) {
         Alert.alert('Palavra repetida', "Essa palavra já foi registrada")
         setLoading(false);
         setWord('')
@@ -101,9 +101,15 @@ export const Historic = () => {
           <>
             {errorAPI ? (
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
-            ) : <View>
-              <GridText />
-            </View>}
+            ) :
+              <ScrollView style={styles.scrollView}>
+
+                <View>
+                  <GridText />
+                </View>
+              </ScrollView>
+
+            }
           </>
         )}
       </View>

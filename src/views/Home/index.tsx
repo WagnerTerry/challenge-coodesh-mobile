@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList } from 'react-native'
+import { Alert, SafeAreaView, ScrollView, Text, TextInput, ToastAndroid, View } from 'react-native'
 import { fetchWord } from '../../services/DictionaryService'
 import { styles } from '../../style/styles'
 import { GridText } from '../../components/GridText'
@@ -11,9 +11,9 @@ export const Home = () => {
   const [word, setWord] = useState('')
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
-  const [list, setList ] = useState([] as any)
+  const [list, setList] = useState([] as any)
 
-  const {  addWord } = useWordList()
+  const { addWord } = useWordList()
 
   useEffect(() => {
     setList(WordList)
@@ -39,7 +39,7 @@ export const Home = () => {
       setLoading(true)
       const newWord = await fetchWord(text)
       const checkRepeatedWord = list.filter((wordRepeated: IWord) => wordRepeated.word.toUpperCase() === text.toUpperCase())
-      if(checkRepeatedWord.length > 0){
+      if (checkRepeatedWord.length > 0) {
         Alert.alert('Palavra repetida', "Essa palavra já foi registrada")
         setLoading(false);
         setWord('')
@@ -87,9 +87,15 @@ export const Home = () => {
           <>
             {errorAPI ? (
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
-            ) : <View>
-              <GridText wordList={list}/>
-            </View>}
+            ) :
+              <ScrollView style={styles.scrollView}>
+
+                <View>
+                  <GridText wordList={list} />
+                </View>
+              </ScrollView>
+
+            }
           </>
         )}
       </View>
