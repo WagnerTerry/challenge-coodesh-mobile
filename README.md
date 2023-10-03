@@ -1,16 +1,30 @@
 # Challenge Coodesh Mobile
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+>**Nota**: Desafio de criar um dicionário em inglês com React Native.
 
-## Iniciando projeto
+## Print do projeto
 
-- npx react-native init dictionary --template     react-native-template-typescript
+<p align="center">
+  <img src="https://github.com/WagnerTerry/challenge-coodesh-mobile/blob/main/src/assets/tela%201.png" alt="Tela 1" />
+</p>
 
-## Step 2: Start your Application
+<p align="center">
+  <img src="https://github.com/WagnerTerry/challenge-coodesh-mobile/blob/main/src/assets/tela%202.png" alt="Tela 2" />
+</p>
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+<p align="center">
+  <img src="https://github.com/WagnerTerry/challenge-coodesh-mobile/blob/main/src/assets/tela%203.png" alt="Tela 3" />
+</p>
 
-### For Android
+## Criando projeto
+
+- npx react-native init dictionary --template react-native-template-typescript
+
+## Iniciando Aplicação
+
+Deixe o Metro Bundler rodar em seu próprio terminal. Abra um _novo_ terminal da _root_ do seu projeto React Native. Execute o seguinte comando para iniciar seu aplicativo _Android_ ou _iOS_:
+
+### Para Android
 
 ```bash
 # using npm
@@ -20,7 +34,7 @@ npm run android
 yarn android
 ```
 
-### For iOS
+### Para iOS
 
 ```bash
 # using npm
@@ -29,8 +43,16 @@ npm run ios
 # OR using Yarn
 yarn ios
 ```
+## Tecnologias usadas:
+- React Native CLI
+- Typescript
+- Axios
+- React native modal
+- React naive tts
+- React native vector icons
+- Async Storage
 
-## Dependencies
+## Dependencias
 - npm install @react-navigation/native
 - npm install react-native-screens react-native-safe-area-context
 - npm install @react-navigation/bottom-tabs
