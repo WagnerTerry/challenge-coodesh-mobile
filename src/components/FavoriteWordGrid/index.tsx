@@ -6,7 +6,7 @@ import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Tts from 'react-native-tts';
 
-export const FavoriteWordGrid = (props: any) => {
+export const FavoriteWordGrid = () => {
 
   const { handleShowToast } = useWordList()
   const [favorites, setFavorites] = useState([] as any);

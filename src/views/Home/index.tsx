@@ -13,7 +13,7 @@ export const Home = () => {
   const [errorAPI] = useState(null)
   const [list, setList ] = useState([] as any)
 
-  const { words, addWord } = useWordList()
+  const {  addWord } = useWordList()
 
   useEffect(() => {
     setList(WordList)

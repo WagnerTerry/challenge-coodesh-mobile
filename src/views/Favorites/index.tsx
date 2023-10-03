@@ -9,18 +9,14 @@ import { FavoriteWordGrid } from '../../components/FavoriteWordGrid'
 
 export const Favorites = () => {
 
-  const { removeWord } = useWordList()
+  const { handleShowToast } = useWordList()
 
   const [favorites, setFavorites] = useState([])
 
   const [loading, setLoading] = useState(false);
   const [errorAPI] = useState(null)
 
-
-  const { words, addWord, removeAllWords } = useWordList()
   const favoriteWords = '@FavoriteWords'
-
-
 
   useEffect(() => {
     async function loadWords() {
@@ -33,17 +29,6 @@ export const Favorites = () => {
     loadWords()
   }, [favorites])
 
-  const handleShowToast = (message: string) => {
-    // Exibe uma mensagem de sucesso temporária
-    ToastAndroid.showWithGravityAndOffset(
-      message,
-      ToastAndroid.LONG, // Duração da mensagem (LONG ou SHORT)
-      ToastAndroid.BOTTOM, // Posição (TOP, BOTTOM, CENTER)
-      25, // Deslocamento vertical em pixels
-      50 // Deslocamento horizontal em pixels
-    );
-  }
-
   const removeFavoriteWord = async (id: string) => {
     try {
       const removeFavorite = favorites.filter((word: any) => word.id !== id)
@@ -53,19 +38,6 @@ export const Favorites = () => {
     } catch (error) {
       console.log("Error removing word", error)
     }
-  }
-
-  const handleRemoveWord = (id: string, word: string) => {
-    Alert.alert(word, 'Deseja realmente excluir essa palavra', [
-      {
-        text: "Cancelar",
-        onPress: () => { }
-      },
-      {
-        text: "Excluir",
-        onPress: () => removeFavoriteWord(id)
-      }
-    ])
   }
 
   const removeAllFavoriteWords = async () => {
