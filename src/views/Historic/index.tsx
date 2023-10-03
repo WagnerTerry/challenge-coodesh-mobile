@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList, ScrollView } from 'react-native'
+import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View } from 'react-native'
 import { fetchWord } from '../../services/DictionaryService'
 import { styles } from '../../style/styles'
 import { GridText } from '../../components/GridText'
@@ -101,13 +101,7 @@ export const Historic = () => {
             {errorAPI ? (
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
             ) :
-              <ScrollView style={styles.scrollView}>
-
-                <View>
-                  <GridText />
-                </View>
-              </ScrollView>
-
+              <GridText />
             }
           </>
         )}

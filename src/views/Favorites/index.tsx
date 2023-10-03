@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Alert, SafeAreaView, Text, TextInput, ToastAndroid, View, FlatList, ScrollView } from 'react-native'
+import { Alert, SafeAreaView, Text, View } from 'react-native'
 import { styles } from '../../style/styles'
 import { IWord, useWordList } from '../../context/WordsContext'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -71,13 +71,7 @@ export const Favorites = () => {
             {errorAPI ? (
               <Text>Erro ao buscar dados. Por favor, tente novamente mais tarde.</Text>
             ) :
-              <ScrollView style={styles.scrollView}>
-
-                <View>
-                  <FavoriteWordGrid />
-                </View>
-
-              </ScrollView>
+              <FavoriteWordGrid />
             }
           </>
         )}
